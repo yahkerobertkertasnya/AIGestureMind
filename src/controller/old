@@ -1,0 +1,66 @@
+import { useEffect, useRef } from "react";
+import "./App.css";
+import * as tf from "@tensorflow/tfjs";
+import handCapture from "./controller/handCapture.ts";
+
+function App() {
+    const video = useRef<HTMLVideoElement>(null);
+    const canvas = useRef<HTMLCanvasElement>(null);
+
+    const predict = async () => {
+        // const model = await tf.loadLayersModel("../src/assets/model.json");
+
+        const image = new Image();
+        image.src = "../src/assets/hand.png";
+        image.onerror = (err) => {
+            console.log(image);
+            console.log(err);
+        };
+        image.onload = async () => {
+            const model = await tf.loadLayersModel("../src/assets/model.json");
+
+            let imageTf = tf.browser.fromPixels(image).toFloat().div(255);
+            imageTf = tf.image.rgbToGrayscale(imageTf);
+
+            const resizedImage = tf.image.resizeNearestNeighbor(imageTf, [28, 28]).expandDims(0);
+
+            const predictions = model.predict(resizedImage);
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const labels = tf.argMax(predictions, 1);
+
+            console.log(labels);
+        };
+    };
+
+    useEffect(() => {
+        // predict();
+
+        // videoHandler();
+        handCapture(canvas.current!.getContext("2d")!, video.current!);
+    }, []);
+
+    return (
+        <>
+            <canvas
+                ref={canvas}
+                id="canvas"
+                width="640"
+                height="480"></canvas>
+            <video
+                ref={video}
+                hidden={true}
+                id="video"
+                width="640"
+                height="480"
+                autoPlay></video>
+            <img
+                id={"handImage"}
+                style={{ width: "auto", height: "100%", marginBottom: "10rem", objectFit: "contain" }}
+            />
+        </>
+    );
+}
+
+export default App;
