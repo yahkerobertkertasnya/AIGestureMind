@@ -1,12 +1,16 @@
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home.tsx";
 
 function App() {
     return (
         <>
-            <img
-                id={"handImage"}
-                style={{ width: "auto", height: "100%", marginBottom: "10rem", objectFit: "contain" }}
-            />
+            <Routes>
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
+            </Routes>
         </>
     );
 }
