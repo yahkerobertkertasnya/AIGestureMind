@@ -1,6 +1,6 @@
 import { HAND_CONNECTIONS, Hands } from "@mediapipe/hands";
 import { Camera } from "@mediapipe/camera_utils";
-import gesturePredict from "./gesturePredict.ts";
+import getGesturePrediction from "./getGesturePrediction.ts";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
 export default function handCapture(ctx: CanvasRenderingContext2D, camera: HTMLVideoElement) {
@@ -57,27 +57,4 @@ export default function handCapture(ctx: CanvasRenderingContext2D, camera: HTMLV
         width: 1280,
         height: 720,
     }).start();
-}
-
-async function saveCanvasImage(canvas: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
-    const newCtx = document.createElement("canvas").getContext("2d");
-    if (!newCtx) return;
-
-    newCtx.drawImage(canvas.canvas, x, y, width, height, 0, 0, width, height);
-    const img = document.getElementById("handImage") as HTMLImageElement;
-    img.src = newCtx.canvas.toDataURL();
-    img.width = width;
-    img.height = height;
-    img.style.width = `${width}px`;
-    img.style.height = `${height}px`;
-
-    const newImage = new Image();
-    newImage.src = newCtx.canvas.toDataURL();
-    newImage.width = width;
-    newImage.height = height;
-    newImage.style.width = `${width}px`;
-    newImage.style.height = `${height}px`;
-    newImage.onload = () => {
-        gesturePredict(newImage).then();
-    };
 }
