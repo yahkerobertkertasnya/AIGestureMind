@@ -1,8 +1,8 @@
 export enum Section {
-    TOP,
-    PROJECT,
-    CONTACT_US,
-    SUPPORT_US,
-    MISSION,
-    SEMINAR,
+    TOP = "TOP",
+    PROJECT = "PROJECT",
+    CONTACT_US = "CONTACT-US",
+    SUPPORT_US = "SUPPORT-US",
+    MISSION = "MISSION",
+    SEMINAR = "SEMINAR",
 }

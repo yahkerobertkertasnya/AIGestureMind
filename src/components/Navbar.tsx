@@ -2,12 +2,13 @@ import { Section } from "../../enum/Section.ts";
 
 interface Navbar {
     navigateTo: (section: Section) => void;
+    isHome?: boolean;
 }
 
-export default function Navbar({ navigateTo }: Navbar) {
+export default function Navbar({ navigateTo, isHome = false }: Navbar) {
     return (
         <>
-            <nav className="bg-[#ECF8F5] w-[100vw] border-gray-200 shadow-md drop-shadow-md z-10">
+            <nav className="bg-[#ECF8F5] w-[100vw] border-gray-200 shadow-md drop-shadow-md z-50">
                 <div className="flex flex-wrap items-center justify-between p-4">
                     <a
                         href="/"
@@ -28,6 +29,8 @@ export default function Navbar({ navigateTo }: Navbar) {
                                 className="px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.TOP)}>
                                 <a
+                                    href={"/"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
                                     aria-current="page">
                                     HOME
@@ -37,6 +40,8 @@ export default function Navbar({ navigateTo }: Navbar) {
                                 className="px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.PROJECT)}>
                                 <a
+                                    href={"/?section=project"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
                                     aria-current="page">
                                     PROJECT
@@ -46,6 +51,8 @@ export default function Navbar({ navigateTo }: Navbar) {
                                 className="px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.CONTACT_US)}>
                                 <a
+                                    // onClick={(e) => (isHome ? e.preventDefault() : "")}
+                                    href={"contact-us"}
                                     className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
                                     aria-current="page">
                                     CONTACT US
@@ -55,6 +62,8 @@ export default function Navbar({ navigateTo }: Navbar) {
                                 className="px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.SUPPORT_US)}>
                                 <a
+                                    href={"/?section=support-us"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
                                     aria-current="page">
                                     SUPPORT US

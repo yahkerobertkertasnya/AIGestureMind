@@ -6,7 +6,7 @@ import OurProject from "../components/OurProjects.tsx";
 import SupportUs from "../components/SupportUs.tsx";
 import Footer from "../components/Footer.tsx";
 import { Section } from "../../enum/Section.ts";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
     const componentRefs = {
@@ -16,6 +16,15 @@ export default function Home() {
         [Section.SUPPORT_US]: useRef<HTMLDivElement>(null),
         [Section.SEMINAR]: useRef<HTMLDivElement>(null),
     };
+
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        const section = query.get("section")?.toUpperCase() as Section;
+
+        console.log(section);
+        navigateTo(section);
+    }, []);
+
     const navigateTo = (section: Section) => {
         if (section === Section.TOP) {
             componentRefs[Section.TOP].current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -47,7 +56,10 @@ export default function Home() {
             className="flex flex-col overflow-x-hidden"
             ref={componentRefs[Section.TOP]}>
             <Header />
-            <Navbar navigateTo={navigateTo} />
+            <Navbar
+                navigateTo={navigateTo}
+                isHome={true}
+            />
             <div ref={componentRefs[Section.SEMINAR]}>
                 <SignLanguageClass />
             </div>
