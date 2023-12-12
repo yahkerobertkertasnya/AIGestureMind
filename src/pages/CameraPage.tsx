@@ -8,7 +8,6 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { HAND_CONNECTIONS, NormalizedLandmarkListList, Results } from "@mediapipe/hands";
 import getGesturePrediction from "../../controller/getGesturePrediction.ts";
 import saveCanvasImage from "../../controller/saveCanvasImage.ts";
-import debounce from "../../controller/debounce.ts";
 import * as tf from "@tensorflow/tfjs";
 
 export default function CameraPage() {
@@ -18,6 +17,13 @@ export default function CameraPage() {
     const imageRef = useRef<HTMLImageElement>(null);
     const navigateTo = (section: Section) => {
         console.log(section);
+    };
+
+    const getCanvas = () => {
+        return {
+            canvas: canvasRef.current!,
+            ctx: canvasRef.current!.getContext("2d")!,
+        };
     };
 
     const videoHandler = async () => {
@@ -36,79 +42,7 @@ export default function CameraPage() {
         hands.onResults((result) => drawCanvas(result));
     };
 
-    const getHandImage = async (multiHandLandmarks: NormalizedLandmarkListList) => {
-        const canvas = canvasRef.current!;
-        const ctx = canvas.getContext("2d")!;
-
-        for (const landmarks of multiHandLandmarks) {
-            let minX = ctx.canvas.width,
-                minY = ctx.canvas.height,
-                maxX = 0,
-                maxY = 0;
-            for (const point of landmarks) {
-                minX = Math.min(minX, point.x * ctx.canvas.width) - 3;
-                minY = Math.min(minY, point.y * ctx.canvas.height) - 3;
-                maxX = Math.max(maxX, point.x * ctx.canvas.width) + 3;
-                maxY = Math.max(maxY, point.y * ctx.canvas.height) + 3;
-            }
-
-            debouncedPrediction(maxX, maxY, minX, minY);
-
-            ctx.strokeStyle = "#FF0000";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(minX, minY, maxX - minX, maxY - minY);
-
-            drawConnectors(ctx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 1 });
-            drawLandmarks(ctx, landmarks, {
-                color: "#FF0000",
-                fillColor: "#00FF00",
-            });
-        }
-    };
-
-    const handleHandImage = async (maxX: number, maxY: number, minX: number, minY: number) => {
-        const canvas = canvasRef.current!;
-        const ctx = canvas.getContext("2d")!;
-        const image = await saveCanvasImage({
-            canvas: ctx.canvas,
-            x: minX,
-            y: minY,
-            width: maxX - minX,
-            height: maxY - minY,
-            newCanvas: document.createElement("canvas"),
-        });
-
-        const dat = await getGesturePrediction(image);
-
-        if (dat === null) {
-            return;
-        }
-
-        canvasRef2.current!.getContext("2d")!.scale(2, 2);
-        // await tf.browser.toPixels(dat, canvasRef2.current!);
-
-        return;
-        const image1 = await tensorToImage(dat!.squeeze());
-
-        return;
-        if (dat === null) {
-            return;
-        }
-
-        const tensorArray = await dat.array();
-        const newCanvas = document.createElement("canvas");
-        const ctx1 = newCanvas.getContext("2d")!;
-
-        const imgData = ctx1.createImageData(28, 28);
-        imgData.data.set(new Uint8ClampedArray(tensorArray.flat()));
-        // ctx1.drawImage(image);
-
-        console.log(image.width, image.height);
-    };
-
-    const debouncedPrediction = debounce(handleHandImage, 1);
-
-    const drawCanvas = (results: Results) => {
+    const drawCanvas = async (results: Results) => {
         const canvas = canvasRef.current!;
         const ctx = canvas.getContext("2d")!;
 
@@ -118,11 +52,79 @@ export default function CameraPage() {
         ctx.imageSmoothingQuality = "high";
 
         if (results.multiHandLandmarks) {
-            getHandImage(results.multiHandLandmarks);
+            await getHandImage(results.multiHandLandmarks);
         }
-
-        ctx.restore();
     };
+
+    const getHandImage = async (multiHandLandmarks: NormalizedLandmarkListList) => {
+        const { canvas, ctx } = getCanvas();
+        for (const landmarks of multiHandLandmarks) {
+            let minX = canvas.width,
+                minY = canvas.height,
+                maxX = 0,
+                maxY = 0;
+            for (const point of landmarks) {
+                minX = Math.min(minX, point.x * canvas.width) - 3;
+                minY = Math.min(minY, point.y * canvas.height) - 3;
+                maxX = Math.max(maxX, point.x * canvas.width) + 3;
+                maxY = Math.max(maxY, point.y * canvas.height) + 3;
+            }
+
+            // debouncedPrediction(maxX, maxY, minX, minY);
+
+            await handleHandImage(maxX, maxY, minX, minY);
+
+            ctx.strokeStyle = "#FF0000";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(minX, minY, maxX - minX, maxY - minY);
+
+            // drawConnectors(ctx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 1 });
+            // drawLandmarks(ctx, landmarks, {
+            //     color: "#FF0000",
+            //     fillColor: "#00FF00",
+            // });
+        }
+    };
+
+    const handleHandImage = async (maxX: number, maxY: number, minX: number, minY: number) => {
+        const { canvas } = getCanvas();
+        const image = await saveCanvasImage({
+            canvas: canvas,
+            x: minX,
+            y: minY,
+            width: maxX - minX,
+            height: maxY - minY,
+            newCanvas: document.createElement("canvas"),
+        });
+
+        const { letter, imageResult } = await getGesturePrediction(image);
+
+        await tf.browser.toPixels(imageResult, canvasRef2.current!);
+
+        console.log(letter);
+        // canvasRef2.current!.getContext("2d")!.scale(2, 2);
+        // await tf.browser.toPixels(dat, canvasRef2.current!);
+
+        return;
+        // const image1 = await tensorToImage(dat!.squeeze());
+        //
+        // return;
+        // if (dat === null) {
+        //     return;
+        // }
+        //
+        // const tensorArray = await dat.array();
+        // const newCanvas = document.createElement("canvas");
+        // const ctx1 = newCanvas.getContext("2d")!;
+        //
+        // const imgData = ctx1.createImageData(28, 28);
+        // imgData.data.set(new Uint8ClampedArray(tensorArray.flat()));
+        // // ctx1.drawImage(image);
+        //
+        // console.log(image.width, image.height);
+    };
+
+    // const debouncedPrediction = debounce(handleHandImage, 1);
 
     useEffect(() => {
         videoHandler();
@@ -135,7 +137,7 @@ export default function CameraPage() {
                     ref={imageRef}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
-                <Navbar navigateTo={navigateTo} />
+                {/*<Navbar navigateTo={navigateTo} />*/}
                 <section className="flex flex-col  w-full h-fit aspect-w-16 aspect-h-9 z-[-1] object-cover">
                     <canvas
                         className="inset-0 z-0 w-full h-fit aspect-w-16 aspect-h-9"
@@ -148,6 +150,10 @@ export default function CameraPage() {
                         ref={canvasRef2}
                         width={1920 / 4}
                         height={1080 / 4}
+                        style={{
+                            width: "200px",
+                            height: "200px",
+                        }}
                     />
                     <video
                         hidden={true}
@@ -155,7 +161,7 @@ export default function CameraPage() {
                         ref={videoRef}
                     />
                 </section>
-                <Footer navigateTo={navigateTo} />
+                {/*<Footer navigateTo={navigateTo} />*/}
             </div>
         </>
     );

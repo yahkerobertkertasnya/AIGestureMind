@@ -1,25 +1,37 @@
 import * as tf from "@tensorflow/tfjs";
+import { Rank, Tensor } from "@tensorflow/tfjs";
 
 const letterPediction = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"];
 
-export default async function getGesturePrediction(image: HTMLImageElement) {
-    try {
-        const model = await tf.loadLayersModel("../src/assets/camera/model.json");
+const model = await tf.loadLayersModel("../src/assets/camera/model.json");
 
+export default async function getGesturePrediction(image: HTMLImageElement) {
+    let letter: string;
+    let imageResult: Tensor<Rank.R3>;
+    try {
         let imageTf = tf.browser.fromPixels(image);
 
         imageTf = tf.image.rgbToGrayscale(imageTf);
 
         imageTf = tf.image.resizeNearestNeighbor(imageTf, [28, 28]);
 
+        imageResult = imageTf;
+
         imageTf = imageTf.reshape([1, 28, 28, 1]);
 
-        let predictions = model.predict(imageTf);
+        let predictions = model.predict(imageTf, { batchSize: 1 });
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         predictions = tf.argMax(predictions, 1);
 
-        console.log(predictions);
+        letter = letterPediction[(await predictions.data())[0]] ?? "";
     } catch (error) {
         console.log(error);
     }
+
+    return {
+        letter,
+        imageResult,
+    };
 }
