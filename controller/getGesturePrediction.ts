@@ -3,11 +3,11 @@ import { Rank, Tensor } from "@tensorflow/tfjs";
 
 const letterPediction = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"];
 
-const model = await tf.loadLayersModel("../src/assets/camera/model.json");
+const model = tf.loadLayersModel("../src/assets/camera/model.json");
 
 export default async function getGesturePrediction(image: HTMLImageElement) {
-    let letter: string;
-    let imageResult: Tensor<Rank.R3>;
+    let letter: string = "";
+    let imageResult: Tensor<Rank.R3> | null = null;
     try {
         let imageTf = tf.browser.fromPixels(image);
 
@@ -19,7 +19,7 @@ export default async function getGesturePrediction(image: HTMLImageElement) {
 
         imageTf = imageTf.reshape([1, 28, 28, 1]);
 
-        let predictions = model.predict(imageTf, { batchSize: 1 });
+        let predictions = (await model).predict(imageTf, { batchSize: 1 });
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

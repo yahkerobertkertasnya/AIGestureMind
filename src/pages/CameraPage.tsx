@@ -1,11 +1,7 @@
-import Navbar from "../components/Navbar.tsx";
-import Footer from "../components/Footer.tsx";
-import { Section } from "../../enum/Section.ts";
 import { useEffect, useRef } from "react";
 import { Camera } from "@mediapipe/camera_utils";
 import getHandCapture from "../../controller/getHandCapture.ts";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { HAND_CONNECTIONS, NormalizedLandmarkListList, Results } from "@mediapipe/hands";
+import { NormalizedLandmarkListList, Results } from "@mediapipe/hands";
 import getGesturePrediction from "../../controller/getGesturePrediction.ts";
 import saveCanvasImage from "../../controller/saveCanvasImage.ts";
 import * as tf from "@tensorflow/tfjs";
@@ -15,9 +11,9 @@ export default function CameraPage() {
     const canvasRef2 = useRef<HTMLCanvasElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
-    const navigateTo = (section: Section) => {
-        console.log(section);
-    };
+    // const navigateTo = (section: Section) => {
+    //     console.log(section);
+    // };
 
     const getCanvas = () => {
         return {
@@ -88,20 +84,21 @@ export default function CameraPage() {
 
     const handleHandImage = async (maxX: number, maxY: number, minX: number, minY: number) => {
         const { canvas } = getCanvas();
-        const image = await saveCanvasImage({
+        saveCanvasImage({
             canvas: canvas,
             x: minX,
             y: minY,
             width: maxX - minX,
             height: maxY - minY,
             newCanvas: document.createElement("canvas"),
+        }).then(async (data: HTMLImageElement) => {
+            const { letter, imageResult } = await getGesturePrediction(data);
+
+            tf.browser.toPixels(imageResult!, canvasRef2.current!).then();
+
+            console.log(letter);
         });
 
-        const { letter, imageResult } = await getGesturePrediction(image);
-
-        await tf.browser.toPixels(imageResult, canvasRef2.current!);
-
-        console.log(letter);
         // canvasRef2.current!.getContext("2d")!.scale(2, 2);
         // await tf.browser.toPixels(dat, canvasRef2.current!);
 
@@ -127,7 +124,7 @@ export default function CameraPage() {
     // const debouncedPrediction = debounce(handleHandImage, 1);
 
     useEffect(() => {
-        videoHandler();
+        videoHandler().then();
     }, []);
 
     return (
@@ -165,35 +162,4 @@ export default function CameraPage() {
             </div>
         </>
     );
-}
-
-async function tensorToImage(tensor) {
-    // Convert the tensor to a data URL
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const [width, height] = tensor.shape.slice(0, 2);
-    canvas.width = width;
-    canvas.height = height;
-
-    // Create ImageData from the tensor
-    const imageData = new ImageData(width, height);
-    const data = await tensor.array();
-    for (let i = 0; i < height; i++) {
-        for (let j = 0; j < width; j++) {
-            const index = (i * width + j) * 4;
-            const value = data[i][j] * 255; // Assuming the tensor was normalized
-            imageData.data[index] = value; // R
-            imageData.data[index + 1] = value; // G
-            imageData.data[index + 2] = value; // B
-            imageData.data[index + 3] = 255; // Alpha
-        }
-    }
-
-    // Draw the ImageData to the canvas
-    ctx.putImageData(imageData, 0, 0);
-
-    // Create an HTMLImageElement from the canvas
-    const image = new Image();
-    image.src = canvas.toDataURL();
-    return image;
 }
