@@ -21,7 +21,7 @@ export default function ContactUs() {
                 />
                 <div className="flex flex-row h-[100vh] items-center justify-center z-[10]">
                     <div className="flex flex-row">
-                        <div className="flex flex-col">
+                        <div className="hidden lg:flex flex-col">
                             <article className="flex flex-row py-10">
                                 <FaWhatsapp className="w-20 text-[5rem]" />
                                 <div className="flex flex-col ml-5 w-[20rem] justify-center gap-2">
@@ -53,10 +53,10 @@ export default function ContactUs() {
                                 <FaYoutube className="w-20 text-[3rem]" />
                             </section>
                         </div>
-                        <div className="flex flex-col ps-24">
-                            <h3 className="text-5xl font-mostserrat text-center pt-10">Contact Us</h3>
+                        <div className="flex flex-col lg:ps-24">
+                            <h3 className="text-5xl font-mostserrat text-center lg:pt-10">Contact Us</h3>
                             <p className="text-xl font-mostserrat text-center pb-5">We are here to help!</p>
-                            <div className="flex flex-row w-[30rem] mx-auto">
+                            <div className="flex flex-row w-[90vw] lg:w-[30vw] mx-auto">
                                 <input
                                     type="text"
                                     placeholder="First Name"
@@ -68,14 +68,14 @@ export default function ContactUs() {
                                     className="border-2 text-black font-mostserrat bg-white w-1/2 rounded-lg p-2 mt-5 ml-2.5"
                                 />
                             </div>
-                            <div className="flex flex-row w-[30rem] mx-auto">
+                            <div className="flex flex-row w-[90vw] lg:w-[30vw] mx-auto">
                                 <input
                                     type="text"
                                     placeholder="Email"
                                     className="border-2 text-black font-mostserrat bg-white w-full rounded-lg p-2 mt-5"
                                 />
                             </div>
-                            <div className="flex flex-row w-[30rem] mx-auto">
+                            <div className="flex flex-row w-[90vw] lg:w-[30vw] mx-auto">
                                 <textarea
                                     placeholder="Message"
                                     className="border-2 h-48 text-black font-mostserrat bg-white w-full rounded-lg p-2 mt-5"

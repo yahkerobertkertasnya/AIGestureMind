@@ -15,56 +15,54 @@ export default function Navbar({ navigateTo, isHome = false }: Navbar) {
                         className="flex items-center space-x-3 rtl:space-x-reverse">
                         <img
                             src="./src/assets/logo.png"
-                            className="h-16 object-center object-contain"
+                            className="h-8 sm:h-16 object-center object-contain"
                             alt="Flowbite Logo"
                         />
                     </a>
                     <div
-                        className="hidden w-full md:block md:w-auto"
+                        className="flex flex-col justify-center items-center lg:block lg:w-auto"
                         id="navbar-default">
-                        <ul
-                            className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0
-                        dark:border-gray-700">
+                        <ul className="font-medium text-[0.6rem] lg:text-lg flex flex-row p-1 lg:p-4 border border-gray-100 rounded-lg">
                             <li
-                                className="px-8 cursor-pointer"
+                                className="px-1 lg:px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.TOP)}>
                                 <a
                                     href={"/"}
                                     onClick={(e) => (isHome ? e.preventDefault() : "")}
-                                    className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
+                                    className="font-mostserrat font-bold block py-2 px-1 lg:px-4 text-black rounded lg:p-0"
                                     aria-current="page">
                                     HOME
                                 </a>
                             </li>
                             <li
-                                className="px-8 cursor-pointer"
+                                className="px-1 lg:px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.PROJECT)}>
                                 <a
                                     href={"/?section=project"}
                                     onClick={(e) => (isHome ? e.preventDefault() : "")}
-                                    className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
+                                    className="font-mostserrat font-bold block py-2 px-1 lg:px-4 text-black rounded lg:p-0"
                                     aria-current="page">
                                     PROJECT
                                 </a>
                             </li>
                             <li
-                                className="px-8 cursor-pointer"
+                                className="px-1 lg:px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.CONTACT_US)}>
                                 <a
                                     // onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     href={"contact-us"}
-                                    className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
+                                    className="font-mostserrat font-bold block py-2 px-1 lg:px-4 text-black rounded lg:p-0"
                                     aria-current="page">
                                     CONTACT US
                                 </a>
                             </li>
                             <li
-                                className="px-8 cursor-pointer"
+                                className="px-1 lg:px-8 cursor-pointer"
                                 onClick={() => navigateTo(Section.SUPPORT_US)}>
                                 <a
                                     href={"/?section=support-us"}
                                     onClick={(e) => (isHome ? e.preventDefault() : "")}
-                                    className="font-mostserrat text-lg font-bold block py-2 px-8 text-black rounded md:p-0"
+                                    className="font-mostserrat font-bold block py-2 px-1 lg:px-4 text-black rounded lg:p-0"
                                     aria-current="page">
                                     SUPPORT US
                                 </a>
