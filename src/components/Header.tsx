@@ -2,7 +2,7 @@ export default function Header() {
     return (
         <section className="relative w-full h-full bg-gray-700 bg-blend-multiply">
             <img
-                src={"./src/assets/home/home-image.png"}
+                src={"./assets/home/home-image.png"}
                 className={"absolute z-[1] w-full h-full object-cover"}
                 alt={""}
             />

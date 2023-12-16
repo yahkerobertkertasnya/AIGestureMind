@@ -2,7 +2,7 @@ export default function SignLanguageClass() {
     return (
         <section className="relative w-full bg-gray-700 bg-blend-multiply">
             <img
-                src={"./src/assets/home/sign-language-class.png"}
+                src={"./assets/home/sign-language-class.png"}
                 className={"absolute z-[1] w-full object-cover"}
                 alt={""}
             />

@@ -4,7 +4,7 @@ export default function SupportUs() {
             <div className="flex flex-col md:flex-row w-full h-[30rem] justify-center items-center">
                 <div className="flex flex-grow flex-col h-full flex-[1]">
                     <img
-                        src={"./src/assets/home/support-us.png"}
+                        src={"./assets/home/support-us.png"}
                         alt={""}
                         className="w-full h-full object-cover"
                     />

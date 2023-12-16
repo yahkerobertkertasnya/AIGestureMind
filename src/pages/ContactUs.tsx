@@ -15,7 +15,7 @@ export default function ContactUs() {
             <Navbar navigateTo={navigateTo} />
             <section className="flex flex-col">
                 <img
-                    src="./src/assets/contactUs/background.png"
+                    src="./assets/contactUs/background.png"
                     className="absolute h-[100vh] w-[100vw] object-cover z-[0] opacity-70"
                     alt="contact-us"
                 />

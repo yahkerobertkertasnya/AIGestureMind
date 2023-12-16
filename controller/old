@@ -8,16 +8,16 @@ function App() {
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const predict = async () => {
-        // const model = await tf.loadLayersModel("../src/assets/model.json");
+        // const model = await tf.loadLayersModel("../assets/model.json");
 
         const image = new Image();
-        image.src = "../src/assets/hand.png";
+        image.src = "../assets/hand.png";
         image.onerror = (err) => {
             console.log(image);
             console.log(err);
         };
         image.onload = async () => {
-            const model = await tf.loadLayersModel("../src/assets/model.json");
+            const model = await tf.loadLayersModel("../assets/model.json");
 
             let imageTf = tf.browser.fromPixels(image).toFloat().div(255);
             imageTf = tf.image.rgbToGrayscale(imageTf);

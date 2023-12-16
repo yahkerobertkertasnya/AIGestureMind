@@ -3,7 +3,7 @@ import { Rank, Tensor } from "@tensorflow/tfjs";
 
 const letterPediction = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"];
 
-const model = tf.loadLayersModel("../src/assets/camera/model.json");
+const model = tf.loadLayersModel("../assets/camera/model.json");
 
 export default async function getGesturePrediction(image: HTMLImageElement) {
     let letter: string = "";

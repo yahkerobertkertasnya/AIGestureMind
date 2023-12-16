@@ -8,7 +8,7 @@ export default function OurProject() {
                         <div className="flex flex-col w-1/2 justify-center items-center">
                             <h2 className="text-md md:text-4xl py-5 font-mostserrat font-bold pt-8 md:pt-16 text-[#272343]">1st Project</h2>
                             <img
-                                src={"./src/assets/home/project-one.png"}
+                                src={"./assets/home/project-one.png"}
                                 alt={""}
                                 className="w-3/4 aspect-square shadow-md drop-shadow-md z-10"
                             />
@@ -16,7 +16,7 @@ export default function OurProject() {
                         <div className="flex flex-col w-1/2 justify-center items-center">
                             <h2 className="text-md md:text-4xl py-5 font-mostserrat font-bold pt-8 md:pt-16 text-[#272343]">2nd Project</h2>
                             <img
-                                src={"./src/assets/home/project-two.png"}
+                                src={"./assets/home/project-two.png"}
                                 alt={""}
                                 className="w-3/4 aspect-square shadow-md drop-shadow-md z-10"
                             />

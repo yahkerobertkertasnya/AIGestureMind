@@ -14,7 +14,7 @@ export default function Navbar({ navigateTo, isHome = false }: Navbar) {
                         href="/"
                         className="flex items-center space-x-3 rtl:space-x-reverse">
                         <img
-                            src="./src/assets/logo.png"
+                            src="./assets/logo.png"
                             className="h-8 sm:h-16 object-center object-contain"
                             alt="Flowbite Logo"
                         />
