@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { Camera } from "@mediapipe/camera_utils";
 import getHandCapture from "../../controller/getHandCapture.ts";
-import { NormalizedLandmarkListList, Results } from "@mediapipe/hands";
+import { HAND_CONNECTIONS, NormalizedLandmarkListList, Results } from "@mediapipe/hands";
 import getGesturePrediction from "../../controller/getGesturePrediction.ts";
 import saveCanvasImage from "../../controller/saveCanvasImage.ts";
 import * as tf from "@tensorflow/tfjs";
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 
 export default function CameraPage() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,7 +44,7 @@ export default function CameraPage() {
         const ctx = canvas.getContext("2d")!;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+        // ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = "high";
 
@@ -66,6 +67,12 @@ export default function CameraPage() {
                 maxY = Math.max(maxY, point.y * canvas.height) + 3;
             }
 
+            drawConnectors(ctx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 1 });
+            drawLandmarks(ctx, landmarks, {
+                color: "#FF0000",
+                fillColor: "#00FF00",
+            });
+
             // debouncedPrediction(maxX, maxY, minX, minY);
 
             await handleHandImage(maxX, maxY, minX, minY);
@@ -73,12 +80,6 @@ export default function CameraPage() {
             ctx.strokeStyle = "#FF0000";
             ctx.lineWidth = 2;
             ctx.strokeRect(minX, minY, maxX - minX, maxY - minY);
-
-            // drawConnectors(ctx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 1 });
-            // drawLandmarks(ctx, landmarks, {
-            //     color: "#FF0000",
-            //     fillColor: "#00FF00",
-            // });
         }
     };
 
