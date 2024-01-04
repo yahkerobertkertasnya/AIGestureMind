@@ -12,6 +12,7 @@ export default function CameraPage() {
     const canvasRef2 = useRef<HTMLCanvasElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
+    const model = tf.loadLayersModel("model.json");
     // const navigateTo = (section: Section) => {
     //     console.log(section);
     // };
@@ -44,7 +45,7 @@ export default function CameraPage() {
         const ctx = canvas.getContext("2d")!;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = "high";
 
@@ -55,17 +56,29 @@ export default function CameraPage() {
 
     const getHandImage = async (multiHandLandmarks: NormalizedLandmarkListList) => {
         const { canvas, ctx } = getCanvas();
+
         for (const landmarks of multiHandLandmarks) {
             let minX = canvas.width,
                 minY = canvas.height,
                 maxX = 0,
                 maxY = 0;
+
+            const landmarkData = [];
+
             for (const point of landmarks) {
                 minX = Math.min(minX, point.x * canvas.width) - 3;
                 minY = Math.min(minY, point.y * canvas.height) - 3;
                 maxX = Math.max(maxX, point.x * canvas.width) + 3;
                 maxY = Math.max(maxY, point.y * canvas.height) + 3;
+
+                const relativeX = point.x - landmarks[0].x;
+                const relativeY = point.y - landmarks[0].y;
+
+                landmarkData.push(relativeX);
+                landmarkData.push(relativeY);
             }
+
+            // console.log(landmarkData);
 
             drawConnectors(ctx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 1 });
             drawLandmarks(ctx, landmarks, {
@@ -73,9 +86,7 @@ export default function CameraPage() {
                 fillColor: "#00FF00",
             });
 
-            // debouncedPrediction(maxX, maxY, minX, minY);
-
-            await handleHandImage(maxX, maxY, minX, minY);
+            await handleHandImage(landmarkData);
 
             ctx.strokeStyle = "#FF0000";
             ctx.lineWidth = 2;
@@ -83,43 +94,15 @@ export default function CameraPage() {
         }
     };
 
-    const handleHandImage = async (maxX: number, maxY: number, minX: number, minY: number) => {
-        const { canvas } = getCanvas();
-        saveCanvasImage({
-            canvas: canvas,
-            x: minX,
-            y: minY,
-            width: maxX - minX,
-            height: maxY - minY,
-            newCanvas: document.createElement("canvas"),
-        }).then(async (data: HTMLImageElement) => {
-            const { letter, imageResult } = await getGesturePrediction(data);
+    const handleHandImage = async (landmarkData: number[]) => {
+        const nonPromiseModel = await model;
 
-            tf.browser.toPixels(imageResult!, canvasRef2.current!).then();
+        const predict = nonPromiseModel.predict(tf.tensor(landmarkData, [1, 42]));
 
-            console.log(letter);
-        });
+        const label = tf.argMax(predict, 1).dataSync()[0];
 
-        // canvasRef2.current!.getContext("2d")!.scale(2, 2);
-        // await tf.browser.toPixels(dat, canvasRef2.current!);
-
-        return;
-        // const image1 = await tensorToImage(dat!.squeeze());
-        //
-        // return;
-        // if (dat === null) {
-        //     return;
-        // }
-        //
-        // const tensorArray = await dat.array();
-        // const newCanvas = document.createElement("canvas");
-        // const ctx1 = newCanvas.getContext("2d")!;
-        //
-        // const imgData = ctx1.createImageData(28, 28);
-        // imgData.data.set(new Uint8ClampedArray(tensorArray.flat()));
-        // // ctx1.drawImage(image);
-        //
-        // console.log(image.width, image.height);
+        const classes = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "Space", "T", "U", "V", "W", "X", "Y", "Z"];
+        console.log(classes[label]);
     };
 
     // const debouncedPrediction = debounce(handleHandImage, 1);
