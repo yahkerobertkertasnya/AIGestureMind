@@ -9,6 +9,12 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.truncate-text {
+    overflow: hidden;
+    /*text-overflow: ellipsis;*/
+    white-space: initial;
+}
+
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

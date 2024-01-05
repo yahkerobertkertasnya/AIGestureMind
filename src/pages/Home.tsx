@@ -72,7 +72,10 @@ export default function Home() {
             <div ref={componentRefs[Section.SUPPORT_US]}>
                 <SupportUs />
             </div>
-            <Footer navigateTo={navigateTo} />
+            <Footer
+                navigateTo={navigateTo}
+                isHome={true}
+            />
         </div>
     );
 }

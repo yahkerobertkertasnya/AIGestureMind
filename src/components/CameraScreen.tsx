@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import videoHandler from "../../controller/video/videoHandler.ts";
 import { Camera } from "@mediapipe/camera_utils";
 import SettingsModal from "./SettingsModal.tsx";
+import Subtitle from "./Subtitle.tsx";
 
 export default function CameraScreen() {
     const [cameraState, setCameraState] = useState(false);
@@ -47,6 +48,7 @@ export default function CameraScreen() {
                                         width={1920}
                                         height={1080}
                                     />
+                                    <Subtitle />
                                 </div>
                             </div>
                         </div>

@@ -4,6 +4,7 @@ import { Color } from "../../interface/color.ts";
 import { Thickness } from "../../interface/thickness.ts";
 import predictModel from "../model/modelHandler.ts";
 import DelayFunction from "../misc/delayFunction.ts";
+import SubtitleSingleton from "../misc/SubtitleSingleton.ts";
 
 let drawingCanvas: HTMLCanvasElement;
 let prediction: string;
@@ -91,6 +92,15 @@ async function getHandImage(multiHandLandmarks: NormalizedLandmarkListList) {
 
         if (predict) {
             prediction = predict;
+
+            if (predict.toLowerCase() === "space") {
+                const setSubtitle = SubtitleSingleton.getInstance().setSubtitle!;
+                setSubtitle((prev) => prev + " ");
+                return;
+            }
+
+            const setSubtitle = SubtitleSingleton.getInstance().setSubtitle!;
+            setSubtitle((prev) => prev + predict);
         }
 
         drawingCtx.strokeStyle = "#FF0000";

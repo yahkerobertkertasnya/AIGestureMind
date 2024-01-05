@@ -2,9 +2,10 @@ import { Section } from "../../enum/Section.ts";
 
 interface Footer {
     navigateTo: (section: Section) => void;
+    isHome?: boolean;
 }
 
-export default function Footer({ navigateTo }: Footer) {
+export default function Footer({ navigateTo, isHome }: Footer) {
     return (
         <>
             <nav className="bg-[#ECF8F5] w-[100vw] border-gray-200 shadow-md drop-shadow-md z-10">
@@ -28,6 +29,8 @@ export default function Footer({ navigateTo }: Footer) {
                                 onClick={() => navigateTo(Section.SEMINAR)}>
                                 <a
                                     className="font-mostserrat font-bold block lg:py-2 lg:px-8 text-black rounded lg:p-0"
+                                    href={"/?section=seminar"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     aria-current="page">
                                     SEMINAR
                                 </a>
@@ -37,6 +40,8 @@ export default function Footer({ navigateTo }: Footer) {
                                 onClick={() => navigateTo(Section.MISSION)}>
                                 <a
                                     className="font-mostserrat font-bold block lg:py-2 lg:px-8 text-black rounded lg:p-0"
+                                    href={"/?section=mission"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     aria-current="page">
                                     MISSION
                                 </a>
@@ -46,6 +51,8 @@ export default function Footer({ navigateTo }: Footer) {
                                 onClick={() => navigateTo(Section.PROJECT)}>
                                 <a
                                     className="font-mostserrat font-bold block lg:py-2 lg:px-8 text-black rounded lg:p-0"
+                                    href={"/?section=project"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     aria-current="page">
                                     PROJECT
                                 </a>
@@ -55,6 +62,8 @@ export default function Footer({ navigateTo }: Footer) {
                                 onClick={() => navigateTo(Section.SUPPORT_US)}>
                                 <a
                                     className="font-mostserrat font-bold block lg:py-2 lg:px-8 text-black rounded lg:p-0"
+                                    href={"/?section=support-us"}
+                                    onClick={(e) => (isHome ? e.preventDefault() : "")}
                                     aria-current="page">
                                     SUPPORT
                                 </a>

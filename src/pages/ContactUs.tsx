@@ -7,7 +7,7 @@ import { IoLocationOutline } from "react-icons/io5";
 
 export default function ContactUs() {
     const navigateTo = (section: Section) => {
-        console.log(section);
+        section;
     };
 
     return (
