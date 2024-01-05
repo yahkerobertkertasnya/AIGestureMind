@@ -6,6 +6,7 @@ export default function getHandCapture() {
             return `/node_modules/@mediapipe/hands/${file}`;
         },
     });
+
     mpHands.setOptions({
         maxNumHands: 2,
         minDetectionConfidence: 0.5,

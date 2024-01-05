@@ -7,7 +7,7 @@ interface SaveCanvas {
     newCanvas: HTMLCanvasElement;
 }
 
-export default async function saveCanvasImage({ canvas, x, y, width, height, newCanvas }: SaveCanvas): Promise<HTMLImageElement> {
+export default async function aveCanvasImage({ canvas, x, y, width, height, newCanvas }: SaveCanvas): Promise<HTMLImageElement> {
     const newCtx = newCanvas.getContext("2d") as CanvasRenderingContext2D;
 
     newCtx.canvas.height = height;

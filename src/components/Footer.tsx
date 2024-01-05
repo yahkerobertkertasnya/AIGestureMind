@@ -14,15 +14,15 @@ export default function Footer({ navigateTo }: Footer) {
                         className="hidden lg:flex items-center space-x-3 rtl:space-x-reverse">
                         <img
                             src="./assets/logo.png"
-                            className="h-8 sm:h-16  object-center object-contain"
+                            className="h-8 sm:h-10  object-center object-contain"
                             alt="Flowbite Logo"
                         />
-                        <h3 className="hidden lg:block text-[0.6rem] lg:text-3xl font-mostserrat font-bold text-[#272343]">GestureMind</h3>
+                        <h3 className="hidden lg:block text-[0.6rem] lg:text-2xl font-mostserrat font-bold text-[#272343]">GestureMind</h3>
                     </a>
                     <div
                         className="w-full flex flex-col lg:w-auto justify-center items-center"
                         id="navbar-default">
-                        <ul className="text-[0.6rem] lg:text-lg justify-center items-center font-medium flex flex-row p-2 lg:p-4 lg:p-0 border border-gray-100 rounded-lg">
+                        <ul className="text-[0.6rem] lg:text-lg justify-center items-center font-medium flex flex-row p-2 lg:p-0 border border-gray-100 rounded-lg">
                             <li
                                 className="px-1 lg:px-8 cursor-pointer "
                                 onClick={() => navigateTo(Section.SEMINAR)}>
@@ -62,8 +62,8 @@ export default function Footer({ navigateTo }: Footer) {
                         </ul>
                     </div>
                     <div className="flex flex-col items-center lg:pr-10">
-                        <p className="text-[0.3rem] lg:text-2xl font-mostserrat font-bold text-[#272343] items-center">@2023 - GestureMind Team</p>
-                        <p className="text-[0.3rem] lg:text-2xl font-mostserrat font-bold text-[#272343] items-center">All Rights Reserved</p>
+                        <p className="text-[0.3rem] lg:text-lg font-mostserrat font-bold text-[#272343] items-center">@2023 - GestureMind Team</p>
+                        <p className="text-[0.3rem] lg:text-lg font-mostserrat font-bold text-[#272343] items-center">All Rights Reserved</p>
                     </div>
                 </div>
             </nav>
