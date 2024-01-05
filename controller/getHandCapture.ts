@@ -7,8 +7,10 @@ export default function getHandCapture() {
         },
     });
 
+    console.log(mpHands);
+
     mpHands.setOptions({
-        maxNumHands: 2,
+        maxNumHands: 1,
         minDetectionConfidence: 0.5,
         minTrackingConfidence: 0.5,
         modelComplexity: 1,
