@@ -3,7 +3,7 @@ import { Hands } from "@mediapipe/hands";
 export default function getHandCapture() {
     const mpHands = new Hands({
         locateFile: (file) => {
-            return `/node_modules/@mediapipe/hands/${file}`;
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
         },
     });
 
