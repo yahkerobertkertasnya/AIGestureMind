@@ -3,7 +3,7 @@ import { Camera } from "@mediapipe/camera_utils";
 import drawCanvas from "../canvas/canvasHandler.ts";
 import { RefObject } from "react";
 
-export default async function videoHandler(canvasRef: RefObject<HTMLCanvasElement>) {
+export default async function videoHandler(canvasRef: RefObject<HTMLCanvasElement>, setFinishedLoading: (finishedLoading: boolean) => void) {
     const canvas = canvasRef.current!;
     const video = document.createElement("video");
     const hands = getHandCapture();
@@ -18,7 +18,10 @@ export default async function videoHandler(canvasRef: RefObject<HTMLCanvasElemen
         height: 1080,
     };
 
-    hands.onResults((result) => drawCanvas(result, canvas));
+    hands.onResults((result) => {
+        setFinishedLoading(true);
+        drawCanvas(result, canvas);
+    });
 
     return new Camera(video, cameraOptions);
 }
